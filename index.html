@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATF双层包壳应力分析工具</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">ATF双层包壳分析工具</div>
+    <nav>
+      <a href="#" class="active" data-section="single">单工况计算</a>
+      <a href="#" data-section="scan">参数扫描</a>
+      <a href="#" data-section="about">关于</a>
+    </nav>
+  </header>
+
+  <main id="section-single" class="page active">
+    <h2>单工况应力与失效评估</h2>
+    <p class="hint">输入几何、材料、载荷、裂纹参数，一键计算环向应力、von Mises应力及三种失效安全系数。</p>
+    <div class="two-col">
+      <section class="card">
+        <h3>几何参数</h3>
+        <label>内半径 a (mm) <input type="number" id="in_a" value="4.19" step="0.01"></label>
+        <label>界面半径 b (mm) <input type="number" id="in_b" value="4.74" step="0.01"></label>
+        <label>外半径 c (mm) <input type="number" id="in_c" value="4.75" step="0.01"></label>
+        <small>涂层厚度 = c-b = <span id="disp_tcoat">10.0</span> μm</small>
+
+        <h3>力学载荷</h3>
+        <label>内压 p_i (MPa) <input type="number" id="in_pi" value="10" step="0.1"></label>
+        <label>外压 p_o (MPa) <input type="number" id="in_po" value="15.5" step="0.1"></label>
+
+        <h3>温度边界</h3>
+        <label>内壁温度 T_inner (K) <input type="number" id="in_ti" value="630" step="1"></label>
+        <label>外壁温度 T_outer (K) <input type="number" id="in_to" value="600" step="1"></label>
+
+        <h3>辐照应变（各向分量）</h3>
+        <div class="triplet">
+          <label id="lbl_irr1a"><span class="mat-name">Zr</span> ε_irr_r <input type="number" id="in_epsirr_r1" value="0.001" step="0.0001"></label>
+          <label>ε_irr_θ <input type="number" id="in_epsirr_t1" value="0.001" step="0.0001"></label>
+          <label>ε_irr_z <input type="number" id="in_epsirr_z1" value="0.005" step="0.0001"></label>
+        </div>
+        <div class="triplet">
+          <label id="lbl_irr2a"><span class="mat-name">Cr</span> ε_irr_r <input type="number" id="in_epsirr_r2" value="0.002" step="0.0001"></label>
+          <label>ε_irr_θ <input type="number" id="in_epsirr_t2" value="0.002" step="0.0001"></label>
+          <label>ε_irr_z <input type="number" id="in_epsirr_z2" value="0.002" step="0.0001"></label>
+        </div>
+
+        <h3>材料属性</h3>
+        <div class="mat-panel">
+          <div class="mat-col">
+            <div class="mat-header">
+              <label>基体材料
+                <select id="sel_mat_zr">
+                  <option value="zt4">Zircaloy-4</option>
+                  <option value="zrnb">Zr-Nb 合金</option>
+                  <option value="custom">+ 自定义材料…</option>
+                </select>
+              </label>
+              <button id="btn_fill_zr" class="btn-fill" title="加载预设参数">加载</button>
+              <button id="btn_save_zr" class="btn-save hidden" title="将当前参数保存为自定义预设">保存</button>
+            </div>
+            <div id="custom_name_row_zr" class="custom-name-row hidden">
+              <label>材料名称 <input type="text" id="in_custom_name_zr" placeholder="例如：Inconel-690" maxlength="20"></label>
+            </div>
+            <div class="mat-fields">
+              <h4 id="matname_zr">Zr 基体</h4>
+              <label>E₁ (GPa) <input type="number" id="in_E1" value="75.7" step="0.1"></label>
+              <label>ν₁ <input type="number" id="in_nu1" value="0.3" step="0.01"></label>
+              <label>α₁ (1/K) <input type="number" id="in_alpha1" value="6.5e-6" step="1e-7"></label>
+              <label>k₁ (W/m·K) <input type="number" id="in_k1" value="16.4" step="0.1"></label>
+              <label>Sy₁ (MPa) <input type="number" id="in_Sy1" value="200" step="1"></label>
+            </div>
+            <div id="custom_list_zr" class="custom-list hidden"></div>
+          </div>
+          <div class="mat-col">
+            <div class="mat-header">
+              <label>涂层材料
+                <select id="sel_mat_cr">
+                  <option value="purecr">纯 Cr</option>
+                  <option value="custom">+ 自定义材料…</option>
+                </select>
+              </label>
+              <button id="btn_fill_cr" class="btn-fill" title="加载预设参数">加载</button>
+              <button id="btn_save_cr" class="btn-save hidden" title="将当前参数保存为自定义预设">保存</button>
+            </div>
+            <div id="custom_name_row_cr" class="custom-name-row hidden">
+              <label>材料名称 <input type="text" id="in_custom_name_cr" placeholder="例如：SiC 涂层" maxlength="20"></label>
+            </div>
+            <div class="mat-fields">
+              <h4 id="matname_cr">Cr 涂层</h4>
+              <label>E₂ (GPa) <input type="number" id="in_E2" value="280" step="1"></label>
+              <label>ν₂ <input type="number" id="in_nu2" value="0.22" step="0.01"></label>
+              <label>α₂ (1/K) <input type="number" id="in_alpha2" value="9.1e-6" step="1e-7"></label>
+              <label>k₂ (W/m·K) <input type="number" id="in_k2" value="76" step="1"></label>
+              <label>Sy₂ (MPa) <input type="number" id="in_Sy2" value="1200" step="1"></label>
+              <label>τ_interface (MPa) <input type="number" id="in_tau" value="80" step="1"></label>
+            </div>
+            <div id="custom_list_cr" class="custom-list hidden"></div>
+          </div>
+        </div>
+
+        <h3>裂纹参数（可选）</h3>
+        <label>裂纹位置
+          <select id="in_crack_pos">
+            <option value="inner">内壁 (inner)</option>
+            <option value="interface">界面 (interface)</option>
+            <option value="outer" selected>外壁 (outer)</option>
+          </select>
+        </label>
+        <label>裂纹长度 a_crack (μm) <input type="number" id="in_a_crack" value="15" step="1"></label>
+        <label>K_IC_Cr (MPa√m) <input type="number" id="in_KIC_Cr" value="0.316" step="0.001"></label>
+        <label>K_IC_Zr (MPa√m) <input type="number" id="in_KIC_Zr" value="0.4" step="0.01"></label>
+
+        <button id="btn_calc" class="btn-primary">计算</button>
+      </section>
+
+      <section class="card result-card">
+        <h3>计算结果</h3>
+        <div id="result-placeholder" class="placeholder">点击「计算」后结果将显示在此处。</div>
+        <div id="result-content" class="hidden"></div>
+      </section>
+    </div>
+  </main>
+
+  <main id="section-scan" class="page">
+    <h2>参数敏感性扫描</h2>
+    <p class="hint">选择一个参数，定义扫描范围，批量计算并绘制安全系数影响曲线。</p>
+    <div class="two-col">
+      <section class="card">
+        <h3>扫描设置</h3>
+        <label>扫描参数
+          <select id="scan_param">
+            <option value="t_coat">涂层厚度 (μm)</option>
+            <option value="p_i">内压 p_i (MPa)</option>
+            <option value="T_inner">内壁温度 T_inner (K)</option>
+          </select>
+        </label>
+        <label>起始值 <input type="number" id="scan_start" value="5"></label>
+        <label>终止值 <input type="number" id="scan_end" value="20"></label>
+        <label>步数 <input type="number" id="scan_steps" value="16" min="2"></label>
+        <div class="scan-note" id="scan_note">涂层厚度: 5 ~ 20 μm，共 16 步</div>
+        <button id="btn_scan" class="btn-primary">开始扫描</button>
+      </section>
+      <section class="card">
+        <h3>扫描结果</h3>
+        <div id="scan-placeholder" class="placeholder">先设置扫描参数，然后点击「开始扫描」。</div>
+        <div id="scan-result" class="hidden"></div>
+        <div id="scan-chart-area" class="hidden">
+          <canvas id="scan-chart" width="700" height="400"></canvas>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <main id="section-about" class="page">
+    <h2>关于本工具</h2>
+    <div class="card">
+      <h3>模型说明</h3>
+      <p>本工具基于<strong>双层厚壁圆管弹性力学平面应变解析解</strong>，求解 Zr 基体 + Cr 防护涂层的 ATF 包壳在热-力-辐照耦合载荷下的应力分布与失效评估。</p>
+      <ul>
+        <li>温度场：双层圆管稳态导热解析解</li>
+        <li>力学场：Lame 方程 + 热-辐照初应变特解</li>
+        <li>边界条件：内壁/外壁面压力，界面应力与位移连续</li>
+        <li>失效判据：涂层屈曲 / 界面剪切脱粘 / 基体 von Mises 屈服 / 裂纹 K_I 对比 K_IC</li>
+      </ul>
+      <h3>原始 MATLAB 代码</h3>
+      <p><code>C:\Users\lqq\Documents\MATLAB\calc_ATF_cladding.m</code><br>
+         <code>C:\Users\lqq\Documents\MATLAB\batch_scan_ATF.m</code></p>
+      <h3>注意事项</h3>
+      <ul>
+        <li>本工具为<strong>理论解析计算</strong>，结果与 Abaqus 有限元存在一定偏差，适合设计阶段快速筛选。</li>
+        <li>辐照应变默认取各向同性径向分量，轴向分量仅影响 sigma_z，不影响平面应变应力解。</li>
+        <li>裂纹分析采用 Irwin 修正公式 K_I = sigma_theta * sqrt(pi*a) * 1.12。</li>
+      </ul>
+    </div>
+  </main>
+
+  <footer><p>ATF Cladding Analysis Tool &nbsp;|&nbsp; 基于 MATLAB calc_ATF_cladding.m 移植 &nbsp;|&nbsp; 仅供学术参考</p></footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
