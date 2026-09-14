@@ -398,6 +398,11 @@ function renderResult(res) {
     html += `<tr><td>K_I / K_IC</td><td class="${cls(1 / res.K_ratio)}">${fmt(res.K_ratio, 3)}</td></tr>`;
   }
   html += `<tr><td>涂层厚度</td><td>${fmt(res.t_coat_um, 1)} μm</td></tr></table>`;
+  html += '<div class="sf-legend">'
+    + '<span class="lg pass">■ ≥ 1.0 安全</span>'
+    + '<span class="lg warn">■ 0.8–1.0 临界</span>'
+    + '<span class="lg fail">■ &lt; 0.8 危险</span>'
+    + '</div>';
   $('result-content').innerHTML = html;
   $('result-placeholder').classList.add('hidden');
   $('result-content').classList.remove('hidden');
@@ -502,6 +507,11 @@ function renderScanResult(paramsArr, resultsArr) {
       <td>${fmt(r.T_interface, 1)}</td></tr>`;
   });
   html += '</table>';
+  html += '<div class="sf-legend">'
+    + '<span class="lg pass">■ ≥ 1.0 安全</span>'
+    + '<span class="lg warn">■ 0.8–1.0 临界</span>'
+    + '<span class="lg fail">■ &lt; 0.8 危险</span>'
+    + '</div>';
   el.innerHTML = html;
   el.classList.remove('hidden');
   $('scan-chart-area').classList.remove('hidden');

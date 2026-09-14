@@ -236,3 +236,5 @@ small { color: #5a7a9a; font-size: 0.78rem; }
 ul { margin: 0.3rem 0 0.5rem 1.2rem; line-height: 1.8; font-size: 0.88rem; }
 code { background: #1a3a5c; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.8rem; color: #fbbf24; }
 footer { background: #0b1f33; border-top: 1px solid #1e3a5f; text-align: center; padding: 0.8rem; font-size: 0.76rem; color: #5a7a9a; }
+.sf-legend { display: flex; gap: 1rem; margin-top: 0.6rem; font-size: 0.78rem; }
+.sf-legend .lg { display: flex; align-items: center; gap: 0.3rem; }
