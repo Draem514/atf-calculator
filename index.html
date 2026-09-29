@@ -7,144 +7,343 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <div class="logo"><span class="mark">✈</span>ATF双层包壳分析工具</div>
-    <nav>
-      <a href="#" class="active" data-section="single">单工况计算</a>
-      <a href="#" data-section="scan">参数扫描</a>
-      <a href="#" data-section="about">关于</a>
-    </nav>
-  </header>
 
-  <main id="section-single" class="page active">
+<header>
+  <div class="logo"><span class="mark">⊕</span><span>ATF 双层包壳分析工具</span></div>
+  <nav>
+    <a href="#" class="active" data-section="single">单工况计算</a>
+    <a href="#" data-section="scan">参数扫描</a>
+    <a href="#" data-section="about">关于</a>
+  </nav>
+</header>
+
+<!-- ====== 单工况页 ====== -->
+<main id="section-single" class="page active">
+  <div class="page-header">
     <h2>单工况应力与失效评估</h2>
-    <p class="hint">输入几何、材料、载荷、裂纹参数，一键计算环向应力、von Mises应力及三种失效安全系数。</p>
-    <div class="two-col">
-      <section class="card">
-        <h3>几何参数</h3>
-        <label>内半径 a (mm) <input type="number" id="in_a" value="4.19" step="0.01"></label>
-        <label>界面半径 b (mm) <input type="number" id="in_b" value="4.74" step="0.01"></label>
-        <label>外半径 c (mm) <input type="number" id="in_c" value="4.75" step="0.01"></label>
-        <small>涂层厚度 = c-b = <span id="disp_tcoat">10.0</span> μm</small>
+    <p class="hint">输入几何、材料、载荷、裂纹参数，一键计算环向应力及三种失效安全系数。</p>
+  </div>
 
-        <h3>力学载荷</h3>
-        <label>内压 p_i (MPa) <input type="number" id="in_pi" value="10" step="0.1"></label>
-        <label>外压 p_o (MPa) <input type="number" id="in_po" value="15.5" step="0.1"></label>
+  <div class="layout-main">
 
-        <h3>温度边界</h3>
-        <label>内壁温度 T_inner (K) <input type="number" id="in_ti" value="630" step="1"></label>
-        <label>外壁温度 T_outer (K) <input type="number" id="in_to" value="600" step="1"></label>
+    <!-- 左侧：输入参数 -->
+    <aside class="panel-left">
 
-        <h3>辐照应变（各向分量）</h3>
-        <div class="triplet">
-          <label id="lbl_irr1a"><span class="mat-name">Zr</span> ε_irr_r <input type="number" id="in_epsirr_r1" value="0.001" step="0.0001"></label>
-          <label>ε_irr_θ <input type="number" id="in_epsirr_t1" value="0.001" step="0.0001"></label>
-          <label>ε_irr_z <input type="number" id="in_epsirr_z1" value="0.005" step="0.0001"></label>
+      <!-- 卡片1：几何 / 载荷 / 温度 -->
+      <section class="card input-card">
+        <h3><span class="sec-dot"></span>几何 · 载荷 · 温度</h3>
+        <div class="field-grid">
+           <div class="field">
+             <label>内半径 <i class="sym">a</i> <span class="unit">(mm)</span></label>
+             <input type="number" id="in_a" value="4.19" step="0.01">
+           </div>
+           <div class="field">
+             <label>界面半径 <i class="sym">b</i> <span class="unit">(mm)</span></label>
+             <input type="number" id="in_b" value="4.74" step="0.01">
+           </div>
+           <div class="field">
+             <label>外半径 <i class="sym">c</i> <span class="unit">(mm)</span></label>
+             <input type="number" id="in_c" value="4.75" step="0.01">
+           </div>
+           <div class="field">
+             <label>涂层厚度 <i class="sym">t</i><sub class="u">c</sub> <span class="unit">(μm)</span></label>
+             <span class="calc-badge" id="disp_tcoat">10.0</span>
+           </div>
+           <div class="field">
+             <label>内压 <i class="sym">p</i><sub class="u">i</sub> <span class="unit">(MPa)</span></label>
+             <input type="number" id="in_pi" value="10" step="0.1">
+           </div>
+           <div class="field">
+             <label>外压 <i class="sym">p</i><sub class="u">o</sub> <span class="unit">(MPa)</span></label>
+             <input type="number" id="in_po" value="15.5" step="0.1">
+           </div>
+           <div class="field">
+             <label>内壁温度 <i class="sym">T</i><sub class="u">in</sub> <span class="unit">(K)</span></label>
+             <input type="number" id="in_ti" value="630" step="1">
+           </div>
+           <div class="field">
+             <label>外壁温度 <i class="sym">T</i><sub class="u">out</sub> <span class="unit">(K)</span></label>
+             <input type="number" id="in_to" value="600" step="1">
+           </div>
         </div>
-        <div class="triplet">
-          <label id="lbl_irr2a"><span class="mat-name">Cr</span> ε_irr_r <input type="number" id="in_epsirr_r2" value="0.002" step="0.0001"></label>
-          <label>ε_irr_θ <input type="number" id="in_epsirr_t2" value="0.002" step="0.0001"></label>
-          <label>ε_irr_z <input type="number" id="in_epsirr_z2" value="0.002" step="0.0001"></label>
-        </div>
+      </section>
 
-        <h3>材料属性</h3>
+      <!-- 卡片2：辐照应变 -->
+      <section class="card input-card">
+        <h3><span class="sec-dot"></span>辐照应变</h3>
+        <div class="irr-group">
+          <div class="irr-title">Zr 基体</div>
+          <div class="field-grid-3">
+            <div class="field"><label><i class="sym">ε</i><sub>r</sub></label><input type="number" id="in_epsirr_r1" value="0.001" step="0.0001"></div>
+            <div class="field"><label><i class="sym">ε</i><sub>θ</sub></label><input type="number" id="in_epsirr_t1" value="0.001" step="0.0001"></div>
+            <div class="field"><label><i class="sym">ε</i><sub>z</sub></label><input type="number" id="in_epsirr_z1" value="0.005" step="0.0001"></div>
+          </div>
+        </div>
+        <div class="irr-group">
+          <div class="irr-title">Cr 涂层</div>
+          <div class="field-grid-3">
+            <div class="field"><label><i class="sym">ε</i><sub>r</sub></label><input type="number" id="in_epsirr_r2" value="0.002" step="0.0001"></div>
+            <div class="field"><label><i class="sym">ε</i><sub>θ</sub></label><input type="number" id="in_epsirr_t2" value="0.002" step="0.0001"></div>
+            <div class="field"><label><i class="sym">ε</i><sub>z</sub></label><input type="number" id="in_epsirr_z2" value="0.002" step="0.0001"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 卡片3：材料属性 -->
+      <section class="card input-card">
+        <h3><span class="sec-dot"></span>材料属性</h3>
         <div class="mat-panel">
+
           <div class="mat-col">
-            <div class="mat-header">
-              <label>基体材料
-                <select id="sel_mat_zr">
-                  <option value="zt4">Zircaloy-4</option>
-                  <option value="zrnb">Zr-Nb 合金</option>
-                  <option value="custom">+ 自定义材料…</option>
-                </select>
-              </label>
-              <button id="btn_fill_zr" class="btn-fill" title="加载预设参数">加载</button>
-              <button id="btn_save_zr" class="btn-save hidden" title="将当前参数保存为自定义预设">保存</button>
+            <div class="mat-top">
+               <select id="sel_mat_zr">
+                <option value="zt4">Zircaloy-4</option>
+                <option value="m5">M5 锆合金</option>
+                <option value="zrnb">Zr-Nb 合金</option>
+                <option value="custom">自定义…</option>
+              </select>
+              <div class="mat-btns">
+                <button id="btn_fill_zr" class="btn-fill" title="加载预设参数">加载</button>
+                <button id="btn_save_zr" class="btn-save hidden" title="保存为自定义预设">保存</button>
+              </div>
             </div>
             <div id="custom_name_row_zr" class="custom-name-row hidden">
-              <label>材料名称 <input type="text" id="in_custom_name_zr" placeholder="例如：Inconel-690" maxlength="20"></label>
+              <input type="text" id="in_custom_name_zr" placeholder="材料名称，如 Inconel-690" maxlength="20">
             </div>
+            <h4 id="matname_zr">Zr 基体</h4>
             <div class="mat-fields">
-              <h4 id="matname_zr">Zr 基体</h4>
-              <label>E₁ (GPa) <input type="number" id="in_E1" value="75.7" step="0.1"></label>
-              <label>ν₁ <input type="number" id="in_nu1" value="0.3" step="0.01"></label>
-              <label>α₁ (1/K) <input type="number" id="in_alpha1" value="6.5e-6" step="1e-7"></label>
-              <label>k₁ (W/m·K) <input type="number" id="in_k1" value="16.4" step="0.1"></label>
-              <label>Sy₁ (MPa) <input type="number" id="in_Sy1" value="200" step="1"></label>
+               <div class="field"><label><i class="sym">E</i> <span class="unit">(GPa)</span></label><input type="number" id="in_E1" value="75.7" step="0.1"></div>
+               <div class="field"><label><i class="sym">ν</i></label><input type="number" id="in_nu1" value="0.3" step="0.01"></div>
+               <div class="field"><label><i class="sym">α</i> <span class="unit">(K<sup>−1</sup>)</span></label><input type="number" id="in_alpha1" value="6.5e-6" step="1e-7"></div>
+               <div class="field"><label><i class="sym">k</i> <span class="unit">(W·m<sup>−1</sup>·K<sup>−1</sup>)</span></label><input type="number" id="in_k1" value="16.4" step="0.1"></div>
+               <div class="field"><label><i class="sym">S</i><sub class="u">y</sub> <span class="unit">(MPa)</span></label><input type="number" id="in_Sy1" value="200" step="1"></div>
             </div>
             <div id="custom_list_zr" class="custom-list hidden"></div>
           </div>
+
           <div class="mat-col">
-            <div class="mat-header">
-              <label>涂层材料
-                <select id="sel_mat_cr">
-                  <option value="purecr">纯 Cr</option>
-                  <option value="custom">+ 自定义材料…</option>
-                </select>
-              </label>
-              <button id="btn_fill_cr" class="btn-fill" title="加载预设参数">加载</button>
-              <button id="btn_save_cr" class="btn-save hidden" title="将当前参数保存为自定义预设">保存</button>
+            <div class="mat-top">
+               <select id="sel_mat_cr">
+                <option value="purecr">纯 Cr</option>
+                <option value="fecral">FeCrAl</option>
+                <option value="craln">CrAlN</option>
+                <option value="custom">自定义…</option>
+              </select>
+              <div class="mat-btns">
+                <button id="btn_fill_cr" class="btn-fill" title="加载预设参数">加载</button>
+                <button id="btn_save_cr" class="btn-save hidden" title="保存为自定义预设">保存</button>
+              </div>
             </div>
             <div id="custom_name_row_cr" class="custom-name-row hidden">
-              <label>材料名称 <input type="text" id="in_custom_name_cr" placeholder="例如：SiC 涂层" maxlength="20"></label>
+              <input type="text" id="in_custom_name_cr" placeholder="材料名称，如 SiC 涂层" maxlength="20">
             </div>
+            <h4 id="matname_cr">Cr 涂层</h4>
             <div class="mat-fields">
-              <h4 id="matname_cr">Cr 涂层</h4>
-              <label>E₂ (GPa) <input type="number" id="in_E2" value="280" step="1"></label>
-              <label>ν₂ <input type="number" id="in_nu2" value="0.22" step="0.01"></label>
-              <label>α₂ (1/K) <input type="number" id="in_alpha2" value="9.1e-6" step="1e-7"></label>
-              <label>k₂ (W/m·K) <input type="number" id="in_k2" value="76" step="1"></label>
-              <label>Sy₂ (MPa) <input type="number" id="in_Sy2" value="1200" step="1"></label>
-              <label>τ_interface (MPa) <input type="number" id="in_tau" value="80" step="1"></label>
+               <div class="field"><label><i class="sym">E</i> <span class="unit">(GPa)</span></label><input type="number" id="in_E2" value="280" step="1"></div>
+               <div class="field"><label><i class="sym">ν</i></label><input type="number" id="in_nu2" value="0.22" step="0.01"></div>
+               <div class="field"><label><i class="sym">α</i> <span class="unit">(K<sup>−1</sup>)</span></label><input type="number" id="in_alpha2" value="9.1e-6" step="1e-7"></div>
+               <div class="field"><label><i class="sym">k</i> <span class="unit">(W·m<sup>−1</sup>·K<sup>−1</sup>)</span></label><input type="number" id="in_k2" value="76" step="1"></div>
+               <div class="field"><label><i class="sym">S</i><sub class="u">y</sub> <span class="unit">(MPa)</span></label><input type="number" id="in_Sy2" value="1200" step="1"></div>
+               <div class="field"><label><i class="sym">τ</i><sub class="u">int</sub> <span class="unit">(MPa)</span></label><input type="number" id="in_tau" value="80" step="1"></div>
             </div>
             <div id="custom_list_cr" class="custom-list hidden"></div>
           </div>
+
         </div>
-
-        <h3>裂纹参数（可选）</h3>
-        <label>裂纹位置
-          <select id="in_crack_pos">
-            <option value="inner">内壁 (inner)</option>
-            <option value="interface">界面 (interface)</option>
-            <option value="outer" selected>外壁 (outer)</option>
-          </select>
-        </label>
-        <label>裂纹长度 a_crack (μm) <input type="number" id="in_a_crack" value="15" step="1"></label>
-        <label>K_IC_Cr (MPa√m) <input type="number" id="in_KIC_Cr" value="0.316" step="0.001"></label>
-        <label>K_IC_Zr (MPa√m) <input type="number" id="in_KIC_Zr" value="0.4" step="0.01"></label>
-
-        <button id="btn_calc" class="btn-primary">计算</button>
       </section>
 
-      <section class="card result-card">
-        <h3>计算结果</h3>
+      <!-- 卡片4：裂纹参数 + 计算 -->
+      <section class="card input-card">
+        <h3><span class="sec-dot"></span>裂纹参数（可选）</h3>
+           <div class="field">
+             <label>裂纹位置</label>
+             <select id="in_crack_pos">
+               <option value="inner">内壁 <i class="sym">r</i> = <i class="sym">a</i></option>
+               <option value="interface">界面 <i class="sym">r</i> = <i class="sym">b</i></option>
+               <option value="outer" selected>外壁 <i class="sym">r</i> = <i class="sym">c</i></option>
+             </select>
+           </div>
+           <div class="field-grid">
+             <div class="field">
+               <label>裂纹长度 <i class="sym">a</i><sub class="u">0</sub> <span class="unit">(μm)</span></label>
+               <input type="number" id="in_a_crack" value="15" step="1">
+             </div>
+             <div class="field">
+               <label><i class="sym">K</i><sub class="u">IC</sub>（Cr 涂层）<span class="unit">(MPa·m<sup>1/2</sup>)</span></label>
+               <input type="number" id="in_KIC_Cr" value="0.316" step="0.001">
+             </div>
+             <div class="field">
+               <label><i class="sym">K</i><sub class="u">IC</sub>（Zr 基体）<span class="unit">(MPa·m<sup>1/2</sup>)</span></label>
+               <input type="number" id="in_KIC_Zr" value="1.265" step="0.01">
+             </div>
+           </div>
+        <button id="btn_calc" class="btn-primary">⚡ 计算</button>
+      </section>
+
+    </aside>
+
+    <!-- 右侧：示意图 + 结果 -->
+    <div class="panel-right">
+      <section class="card diagram-card">
+        <h3><span class="sec-dot"></span>截面示意</h3>
+        <div class="diagram-wrap">
+          <svg id="tube-svg" viewBox="0 0 580 330" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-cr" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#e8cc7a" stop-opacity="0.92"/>
+                <stop offset="100%" stop-color="#b89440" stop-opacity="1"/>
+              </linearGradient>
+              <linearGradient id="grad-zr" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4a8ec9" stop-opacity="0.82"/>
+                <stop offset="100%" stop-color="#1c3d66" stop-opacity="0.96"/>
+              </linearGradient>
+              <radialGradient id="grad-hole" cx="45%" cy="42%" r="58%">
+                <stop offset="0%" stop-color="#0c1c30"/>
+                <stop offset="100%" stop-color="#132a47"/>
+              </radialGradient>
+              <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="#f87171"/></marker>
+              <marker id="arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 z" fill="#60a5fa"/></marker>
+            </defs>
+
+             <!-- ==================== 左侧：整体截面（小） ==================== -->
+             <text x="118" y="268" fill="#8ab4f8" font-size="10" text-anchor="middle" font-family="Segoe UI" font-weight="600">整体截面</text>
+
+             <!-- 外圈背景 -->
+             <circle cx="118" cy="155" r="84" fill="#091520" stroke="#1e3a5f" stroke-width="0.8"/>
+
+             <!-- Cr 涂层环（最外层，示意加厚显示） -->
+             <circle cx="118" cy="155" r="75.5" fill="none" stroke="url(#grad-cr)" stroke-width="4" stroke-linejoin="round"/>
+
+             <!-- Zr 基体环（在内侧，与涂层相接） -->
+             <circle cx="118" cy="155" r="67" fill="none" stroke="url(#grad-zr)" stroke-width="13" stroke-linejoin="round"/>
+
+             <!-- 内孔 -->
+             <circle cx="118" cy="155" r="60" fill="url(#grad-hole)" stroke="#2a5580" stroke-width="1.4"/>
+
+            <!-- 中心十字线（点划线） -->
+            <line x1="22" y1="155" x2="214" y2="155" stroke="#2a4a6a" stroke-width="0.6" stroke-dasharray="6,3"/>
+            <line x1="118" y1="59" x2="118" y2="251" stroke="#2a4a6a" stroke-width="0.6" stroke-dasharray="6,3"/>
+            <circle cx="118" cy="155" r="1.5" fill="#3a5a7a"/>
+
+            <!-- 半径标注线：a=内壁 b=界面 c=外壁 -->
+            <line x1="118" y1="155" x2="178" y2="155" stroke="#8ab4f8" stroke-width="0.9" stroke-dasharray="4,2"/>
+            <circle cx="178" cy="155" r="2" fill="#8ab4f8"/>
+            <text x="149" y="148" fill="#8ab4f8" font-size="12" font-style="italic" font-family="Cambria Math,Times New Roman">a</text>
+
+            <line x1="118" y1="155" x2="192" y2="155" stroke="#e0c27a" stroke-width="0.9" stroke-dasharray="4,2"/>
+            <circle cx="192" cy="155" r="2" fill="#e0c27a"/>
+            <text x="160" y="170" fill="#e0c27a" font-size="12" font-style="italic" font-family="Cambria Math,Times New Roman">b</text>
+
+            <line x1="118" y1="155" x2="202" y2="155" stroke="#4ade80" stroke-width="0.9" stroke-dasharray="4,2"/>
+            <circle cx="202" cy="155" r="2" fill="#4ade80"/>
+            <text x="169" y="186" fill="#4ade80" font-size="12" font-style="italic" font-family="Cambria Math,Times New Roman">c</text>
+
+             <!-- 压力箭头 -->
+             <path d="M 148 118 L 164 118" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
+             <text x="156" y="110" fill="#f87171" font-size="11" font-style="italic" font-family="Cambria Math,Times New Roman">p<tspan dy="2" font-size="8">i</tspan></text>
+
+             <path d="M 224 130 L 208 130" stroke="#60a5fa" stroke-width="1.4" marker-end="url(#arr-blue)"/>
+             <text x="226" y="124" fill="#60a5fa" font-size="11" font-style="italic" font-family="Cambria Math,Times New Roman">p<tspan dy="2" font-size="8">o</tspan></text>
+
+            <!-- 指示圈（r≈b 处，涂层-基体界面） -->
+            <ellipse cx="192" cy="135" rx="14" ry="7" fill="none" stroke="#c4a35a" stroke-width="1.4" stroke-dasharray="4,2"/>
+            <!-- 指引线到右侧放大框 -->
+            <path d="M 206,131 Q 290,110 355,95" fill="none" stroke="#c4a35a" stroke-width="1.1" stroke-dasharray="5,3" opacity="0.75"/>
+            <polygon points="350,92 358,95 350,98" fill="#c4a35a" opacity="0.75"/>
+
+             <!-- 注记 -->
+
+             <!-- ==================== 右侧：局部放大框（主导） ==================== -->
+            <rect x="355" y="72" width="190" height="224" rx="10" fill="#0d1b2a" stroke="#c4a35a" stroke-width="2"/>
+
+            <!-- 标题 -->
+             <text x="450" y="94" fill="#c4a35a" font-size="13" text-anchor="middle" font-family="Segoe UI" font-weight="600">涂层/基体 截面示意</text>
+
+             <!-- ===== 层状剖面 ===== -->
+             <!-- Cr 涂层（金色条带） -->
+             <rect x="370" y="106" width="160" height="18" rx="3" fill="url(#grad-cr)" stroke="#d4b86a" stroke-width="1.2"/>
+
+             <!-- 界面分界线（金色粗线） -->
+             <line x1="368" y1="124" x2="532" y2="124" stroke="#e0c27a" stroke-width="2"/>
+             <text x="536" y="128" fill="#e0c27a" font-size="10" font-family="Segoe UI" font-weight="600">界面 <tspan font-style="italic" font-family="Cambria Math,Times New Roman">b</tspan></text>
+
+             <!-- Zr 基体（蓝色大条带） -->
+             <rect x="370" y="124" width="160" height="100" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
+
+             <!-- 内孔示意（底部深色条带） -->
+             <rect x="370" y="224" width="160" height="38" rx="3" fill="#0a1520" stroke="#2a5580" stroke-width="1"/>
+             <text x="450" y="247" fill="#5a7a9a" font-size="9" text-anchor="middle" font-family="Segoe UI">内孔（<tspan font-style="italic" font-family="Cambria Math,Times New Roman">r</tspan> = <tspan font-style="italic" font-family="Cambria Math,Times New Roman">a</tspan>）</text>
+
+             <!-- 右侧材料标签 -->
+             <text x="538" y="120" fill="#e0c27a" font-size="11" font-family="Segoe UI">Cr 涂层</text>
+             <text x="538" y="178" fill="#9db8d6" font-size="11" font-family="Segoe UI">Zr 基体</text>
+
+             <!-- 左侧尺寸标注线 -->
+             <!-- 涂层厚度 t_c -->
+             <line x1="362" y1="106" x2="362" y2="124" stroke="#c4a35a" stroke-width="1.1"/>
+             <polygon points="358,110 366,110 362,106" fill="#c4a35a"/>
+             <polygon points="358,120 366,120 362,124" fill="#c4a35a"/>
+              <text x="355" y="119" fill="#c4a35a" font-size="10" text-anchor="end" font-family="Cambria Math,Times New Roman"><tspan font-style="italic">t</tspan><tspan font-size="7" dy="2" font-style="normal">c</tspan></text>
+
+             <!-- 基体厚度 t_zr -->
+             <line x1="348" y1="124" x2="348" y2="224" stroke="#8ab4f8" stroke-width="1.1"/>
+             <polygon points="344,128 352,128 348,124" fill="#8ab4f8"/>
+             <polygon points="344,220 352,220 348,224" fill="#8ab4f8"/>
+              <text x="341" y="178" fill="#8ab4f8" font-size="10" text-anchor="end" font-family="Cambria Math,Times New Roman"><tspan font-style="italic">t</tspan><tspan font-size="7" dy="2" font-style="normal">zr</tspan></text>
+
+            <!-- 底部说明框 -->
+            <rect x="370" y="280" width="170" height="46" rx="7" fill="rgba(196,163,90,0.06)" stroke="#c4a35a" stroke-width="0.8" stroke-dasharray="3,2"/>
+            <text x="455" y="298" fill="#c4a35a" font-size="10" text-anchor="middle" font-family="Segoe UI" font-weight="500">内压 <tspan font-style="italic" font-family="Cambria Math,Times New Roman">p</tspan><tspan font-size="7" dy="2">i</tspan> → 涂层环向压应力</text>
+            <text x="455" y="315" fill="#8ab4f8" font-size="10" text-anchor="middle" font-family="Segoe UI">界面剪切脱粘风险区</text>
+          </svg>
+        </div>
+        <div class="diagram-legend">
+          <span><i class="sw sw-zr"></i>Zr 基体</span>
+          <span><i class="sw sw-cr"></i>Cr 涂层</span>
+          <span><i class="sw sw-hole"></i>内孔</span>
+        </div>
+      </section>
+
+      <section class="card result-card" id="result-card">
+        <h3><span class="sec-dot"></span>计算结果</h3>
         <div id="result-placeholder" class="placeholder">点击「计算」后结果将显示在此处。</div>
         <div id="result-content" class="hidden"></div>
       </section>
     </div>
-  </main>
 
-  <main id="section-scan" class="page">
+  </div>
+</main>
+
+<!-- ====== 参数扫描页 ====== -->
+<main id="section-scan" class="page">
+  <div class="page-header">
     <h2>参数敏感性扫描</h2>
     <p class="hint">选择一个参数，定义扫描范围，批量计算并绘制安全系数影响曲线。</p>
-    <div class="two-col">
-      <section class="card">
-        <h3>扫描设置</h3>
-        <label>扫描参数
+  </div>
+  <div class="layout-main">
+    <aside class="panel-left">
+      <section class="card input-card">
+        <h3><span class="sec-dot"></span>扫描设置</h3>
+        <div class="field span-2" style="margin-bottom:0.55rem;">
+          <label>扫描参数</label>
           <select id="scan_param">
-            <option value="t_coat">涂层厚度 (μm)</option>
-            <option value="p_i">内压 p_i (MPa)</option>
-            <option value="T_inner">内壁温度 T_inner (K)</option>
+            <option value="t_coat">涂层厚度 <i class="sym">t</i><sub class="u">c</sub> <span class="unit">(μm)</span></option>
+            <option value="p_i">内压 <i class="sym">p</i><sub class="u">i</sub> <span class="unit">(MPa)</span></option>
+            <option value="T_inner">内壁温度 <i class="sym">T</i><sub class="u">in</sub> <span class="unit">(K)</span></option>
           </select>
-        </label>
-        <label>起始值 <input type="number" id="scan_start" value="5"></label>
-        <label>终止值 <input type="number" id="scan_end" value="20"></label>
-        <label>步数 <input type="number" id="scan_steps" value="16" min="2"></label>
+        </div>
+        <div class="field-grid">
+          <div class="field"><label>起始值</label><input type="number" id="scan_start" value="5"></div>
+          <div class="field"><label>终止值</label><input type="number" id="scan_end" value="20"></div>
+          <div class="field"><label>步数</label><input type="number" id="scan_steps" value="16" min="2"></div>
+        </div>
         <div class="scan-note" id="scan_note">涂层厚度: 5 ~ 20 μm，共 16 步</div>
-        <button id="btn_scan" class="btn-primary">开始扫描</button>
+        <button id="btn_scan" class="btn-primary">▶ 开始扫描</button>
       </section>
-      <section class="card">
-        <h3>扫描结果</h3>
+    </aside>
+    <div class="panel-right">
+      <section class="card result-card">
+        <h3><span class="sec-dot"></span>扫描结果</h3>
         <div id="scan-placeholder" class="placeholder">先设置扫描参数，然后点击「开始扫描」。</div>
         <div id="scan-result" class="hidden"></div>
         <div id="scan-chart-area" class="hidden">
@@ -152,29 +351,36 @@
         </div>
       </section>
     </div>
-  </main>
+  </div>
+</main>
 
-  <main id="section-about" class="page">
-    <h2>关于本工具</h2>
-    <div class="card">
-      <h3>模型说明</h3>
-      <p>本工具基于<strong>双层厚壁圆管弹性力学平面应变解析解</strong>，求解 Zr 基体 + Cr 防护涂层的 ATF 包壳在热-力-辐照耦合载荷下的应力分布与失效评估。</p>
-      <ul>
+<!-- ====== 关于页 ====== -->
+<main id="section-about" class="page">
+  <div class="page-header"><h2>关于本工具</h2></div>
+  <div class="about-wrap">
+    <section class="card input-card">
+      <h3><span class="sec-dot"></span>模型说明</h3>
+      <p class="about-p">
+        本工具基于<strong>双层厚壁圆管弹性力学平面应变解析解</strong>，求解 Zr 基体 + Cr 防护涂层的 ATF 包壳在热-力-辐照耦合载荷下的应力分布与失效评估。
+      </p>
+      <ul class="info-list">
         <li>温度场：双层圆管稳态导热解析解</li>
-        <li>力学场：Lame 方程 + 热-辐照初应变特解</li>
+        <li>力学场：Lamé 方程 + 热-辐照初应变特解</li>
         <li>边界条件：内壁/外壁面压力，界面应力与位移连续</li>
-        <li>失效判据：涂层屈曲 / 界面剪切脱粘 / 基体 von Mises 屈服 / 裂纹 K_I 对比 K_IC</li>
+        <li>失效判据：涂层屈曲 / 界面剪切脱粘 / 基体 von Mises 屈服 / 裂纹 K<sub>I</sub> 对比 K<sub>IC</sub></li>
       </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li>本工具为<strong>理论解析计算</strong>，结果与 Abaqus 有限元存在一定偏差，适合设计阶段快速筛选。</li>
-        <li>辐照应变默认取各向同性径向分量，轴向分量仅影响 sigma_z，不影响平面应变应力解。</li>
-        <li>裂纹分析采用 Irwin 修正公式 K_I = sigma_theta * sqrt(pi*a) * 1.12。</li>
-      </ul>
-    </div>
-  </main>
+    </section>
+     <section class="card input-card" style="margin-top:1rem;">
+       <h3><span class="sec-dot"></span>公式说明</h3>
+       <ul class="info-list">
+         <li>本工具基于双层厚壁圆管弹性力学平面应变解析解，热-力耦合求解。</li>
+         <li>失效判据包含涂层屈曲安全系数、界面剪切脱粘安全系数、基体 von Mises 屈服安全系数，以及裂纹 K<sub>I</sub> 与 K<sub>IC</sub> 的比值。</li>
+       </ul>
+     </section>
+  </div>
+</main>
 
-  <footer><p>ATF Cladding Analysis Tool &nbsp;|&nbsp; 双层厚壁圆管解析解 &nbsp;|&nbsp; 仅供学术参考</p></footer>
-  <script src="js/app.js"></script>
+<footer><p>ATF Cladding Analysis Tool &nbsp;·&nbsp; 双层厚壁圆管解析解 &nbsp;·&nbsp; 仅供学术参考</p></footer>
+<script src="js/app.js"></script>
 </body>
 </html>

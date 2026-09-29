@@ -161,13 +161,18 @@ function calcSingle(p) {
 }
 
 // ===== 材料预设库 =====
+// 组合数据来自《数据参数.docx》三种 ATF 材料组合手册
+// 组合1: Zr4 + 纯Cr；组合2: M5 + FeCrAl；组合3: Zr4 + CrAlN
 const PRESET_MATERIALS = {
   zr: {
-    zt4: { E: 75.7, nu: 0.30, alpha: 6.5e-6, k: 16.4, Sy: 200, label: 'Zircaloy-4' },
-    zrnb: { E: 95.0, nu: 0.34, alpha: 7.0e-6, k: 22.0, Sy: 350, label: 'Zr-Nb 合金' }
+    zt4: { E: 75.7, nu: 0.30, alpha: 6.5e-6, k: 16.4, Sy: 200, label: 'Zircaloy-4', KIC: 1.265 },
+    m5:  { E: 77.0, nu: 0.30, alpha: 6.2e-6, k: 16.8, Sy: 220, label: 'M5 锆合金',  KIC: 1.328 },
+    zrnb:{ E: 95.0, nu: 0.34, alpha: 7.0e-6, k: 22.0, Sy: 350, label: 'Zr-Nb 合金', KIC: 1.265 }
   },
   cr: {
-    purecr: { E: 280, nu: 0.22, alpha: 9.1e-6, k: 76, Sy: 1200, tau: 80, label: '纯 Cr' }
+    purecr: { E: 280, nu: 0.22, alpha: 9.1e-6, k: 76,  Sy: 1200, tau: 80,  KIC: 0.316, label: '纯 Cr' },
+    fecral: { E: 210, nu: 0.28, alpha: 13.5e-6, k: 25,  Sy: 600,  tau: 90,  KIC: 0.569, label: 'FeCrAl' },
+    craln:  { E: 320, nu: 0.23, alpha: 7.8e-6,  k: 20,  Sy: 1800, tau: 50,  KIC: 0.190, label: 'CrAlN' }
   }
 };
 
@@ -273,7 +278,11 @@ function fillMaterial(side) {
   $(prefix + 'alpha' + numIdx).value = m.alpha;
   $(prefix + 'k' + numIdx).value = m.k;
   $(prefix + 'Sy' + numIdx).value = m.Sy;
-  if (side === 'cr') $(prefix + 'tau').value = m.tau || 80;
+  if (side === 'cr') {
+    $(prefix + 'tau').value = m.tau || 80;
+    $('in_KIC_Cr').value = m.KIC || 0.316;
+  }
+  if (side === 'zr') $('in_KIC_Zr').value = m.KIC || 1.265;
   // 更新标签
   const nameEl = $(side === 'zr' ? 'matname_zr' : 'matname_cr');
   const lblIrr = $(side === 'zr' ? 'lbl_irr1a' : 'lbl_irr2a');
@@ -372,49 +381,80 @@ function readParams() {
 
 // ===== 渲染单工况结果 =====
 function fmt(v, d=4) { return Number(v.toFixed(d)).toString(); }
-function cls(v) { return v >= 1 ? 'pass' : v < 0.8 ? 'fail' : 'warn'; }
+function clsSF(sf, type) {
+  if (type === 'buckling') return sf >= 1 ? 'pass' : sf < 0.8 ? 'fail' : 'warn';
+  if (type === 'yield')    return sf >= 1.5 ? 'pass' : sf < 1.0 ? 'fail' : 'warn';
+  return sf >= 5  ? 'pass' : sf < 1  ? 'fail' : 'warn';
+}
+
+function sym(s) { return `<i class="sym">${s}</i>`; }
+function symsub(sub) { return `<sub>${sub}</sub>`; }
+function symsubu(sub) { return `<sub class="u">${sub}</sub>`; }
 
 function renderResult(res) {
   const rows = [
     ['Zr/Cr 界面温度', fmt(res.T_interface, 1) + ' K'],
-    ['内壁环向应力 σ_θ (r=a)', fmt(res.sigmaTheta_inner / 1e6, 1) + ' MPa'],
-    ['界面环向应力 σ_θ (r=b, Zr侧)', fmt(res.sigmaTheta_interface_Zr / 1e6, 1) + ' MPa'],
-    ['界面环向应力 σ_θ (r=b, Cr侧)', fmt(res.sigmaTheta_interface_Cr / 1e6, 1) + ' MPa'],
-    ['外壁环向应力 σ_θ (r=c)', fmt(res.sigmaTheta_outer / 1e6, 1) + ' MPa'],
-    ['内壁 von Mises 应力', fmt(res.vonMises_inner / 1e6, 1) + ' MPa'],
+    ['内壁环向应力 ' + sym('σ') + symsub('θ') + '（<i class="sym">r</i>=' + sym('a') + '）', fmt(res.sigmaTheta_inner / 1e6, 1) + ' MPa'],
+    ['界面环向应力 ' + sym('σ') + symsub('θ') + '（<i class="sym">r</i>=' + sym('b') + '，Zr 侧）', fmt(res.sigmaTheta_interface_Zr / 1e6, 1) + ' MPa'],
+    ['界面环向应力 ' + sym('σ') + symsub('θ') + '（<i class="sym">r</i>=' + sym('b') + '，Cr 侧）', fmt(res.sigmaTheta_interface_Cr / 1e6, 1) + ' MPa'],
+    ['外壁环向应力 ' + sym('σ') + symsub('θ') + '（<i class="sym">r</i>=' + sym('c') + '）', fmt(res.sigmaTheta_outer / 1e6, 1) + ' MPa'],
+    ['内壁 von Mises 应力 ' + sym('σ') + symsubu('vM') + '', fmt(res.vonMises_inner / 1e6, 1) + ' MPa'],
   ];
   const sfRows = [
-    ['涂层屈曲安全系数', res.safety_buckling, fmt(res.safety_buckling, 2)],
-    ['界面剪切安全系数', res.safety_interface, fmt(res.safety_interface, 2)],
-    ['基体屈服安全系数', res.safety_yield, fmt(res.safety_yield, 2)],
+    ['涂层屈曲 <i class="sym">S</i><sub class="u">F</sub>', res.safety_buckling, fmt(res.safety_buckling, 2)],
+    ['界面剪切 <i class="sym">S</i><sub class="u">F</sub>', res.safety_interface, fmt(res.safety_interface, 2)],
+    ['基体屈服 <i class="sym">S</i><sub class="u">F</sub>', res.safety_yield, fmt(res.safety_yield, 2)],
   ];
+  const sfType = ['buckling','interface','yield'];
+  const dangerItems = [];
+  sfRows.forEach((r, i) => {
+    const sf = r[1], type = sfType[i];
+    if (type === 'buckling' && sf < 0.8) dangerItems.push('涂层屈曲');
+    else if (type === 'yield' && sf < 1.0) dangerItems.push('基体屈服');
+    else if (type === 'interface' && sf < 1.0) dangerItems.push('界面脱粘');
+  });
+  const hasDanger = dangerItems.length > 0;
+
   let html = '<table class="result-table"><tr><th colspan="2">温度场与应力</th></tr>';
   rows.forEach(r => { html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`; });
   html += '<tr><th colspan="2">失效评估</th></tr>';
-  sfRows.forEach(r => { html += `<tr><td>${r[0]}</td><td class="${cls(r[1])}">${r[2]}</td></tr>`; });
+  sfRows.forEach((r, i) => {
+    const type = sfType[i];
+    const sf = r[1];
+    const clsName = clsSF(sf, type);
+    const rowClass = clsName === 'pass' ? 'row-pass' : clsName === 'fail' ? 'row-fail' : 'row-warn';
+    html += `<tr class="${rowClass}"><td>${r[0]}</td><td class="${clsName}">${r[2]}</td></tr>`;
+  });
   if (res.K_I != null) {
     html += '<tr><th colspan="2">裂纹断裂力学</th></tr>';
-    html += `<tr><td>K_I (Mode I)</td><td>${fmt(res.K_I / 1e6, 3)} MPa√m</td></tr>`;
-    html += `<tr><td>K_I / K_IC</td><td class="${cls(1 / res.K_ratio)}">${fmt(res.K_ratio, 3)}</td></tr>`;
+    html += `<tr><td><i class="sym">K</i><sub class="u">I</sub>（I 型）</td><td>${fmt(res.K_I / 1e6, 3)} MPa·m<sup>1/2</sup></td></tr>`;
+    html += `<tr><td><i class="sym">K</i><sub class="u">I</sub> / <i class="sym">K</i><sub class="u">IC</sub></td><td class="${res.K_ratio >= 1 ? 'fail' : res.K_ratio >= 0.8 ? 'warn' : 'pass'}">${fmt(res.K_ratio, 3)}</td></tr>`;
   }
-  html += `<tr><td>涂层厚度</td><td>${fmt(res.t_coat_um, 1)} μm</td></tr></table>`;
+  if (hasDanger) {
+    html = '<div class="danger-banner">⚠ 检测到危险工况：' + dangerItems.join('、') + '</div>' + html;
+  }
+  html += `<tr><td>涂层厚度 <i class="sym">t</i><sub class="u">c</sub></td><td>${fmt(res.t_coat_um, 1)} μm</td></tr></table>`;
   html += '<div class="sf-legend">'
-    + '<span class="lg pass">■ ≥ 1.0 安全</span>'
-    + '<span class="lg warn">■ 0.8–1.0 临界</span>'
-    + '<span class="lg fail">■ &lt; 0.8 危险</span>'
+    + '<span class="lg pass">■ 涂层屈曲 ≥ 1 / 基体屈服 ≥ 1.5 / 界面剪切 ≥ 5</span>'
+    + '<span class="lg warn">■ 涂层屈曲 0.8–1 / 基体屈服 1–1.5 / 界面剪切 1–5</span>'
+    + '<span class="lg fail">■ 涂层屈曲 &lt; 0.8 / 基体屈服 &lt; 1 / 界面剪切 &lt; 1</span>'
     + '</div>';
   $('result-content').innerHTML = html;
   $('result-placeholder').classList.add('hidden');
   $('result-content').classList.remove('hidden');
+  const card = document.querySelector('.result-card');
+  card.classList.toggle('has-danger', hasDanger);
 }
 
 // ===== 扫描 =====
 function updateScanNote() {
   const param = $('scan_param').value;
   const start = val('scan_start'), end = val('scan_end'), steps = val('scan_steps');
-  const unit = param === 't_coat' ? 'μm' : param === 'p_i' ? 'MPa' : 'K';
-  const label = param === 't_coat' ? '涂层厚度' : param === 'p_i' ? '内压 p_i' : '内壁温度 T_inner';
-  $('scan_note').textContent = `${label}: ${start} ~ ${end} ${unit}，共 ${steps} 步`;
+  let label, unit;
+  if (param === 't_coat') { label = '涂层厚度 <i class="sym">t</i><sub class="u">c</sub>'; unit = 'μm'; }
+  else if (param === 'p_i') { label = '内压 <i class="sym">p</i><sub class="u">i</sub>'; unit = 'MPa'; }
+  else { label = '内壁温度 <i class="sym">T</i><sub class="u">in</sub>'; unit = 'K'; }
+  $('scan_note').innerHTML = `${label}：${start} ~ ${end} ${unit}，共 ${steps} 步`;
 }
 
 function drawScanChart(labels, buckling, interf, yield_) {
@@ -498,19 +538,19 @@ function renderScanResult(paramsArr, resultsArr) {
   const yield_ = resultsArr.map(r => r.safety_yield);
 
   const el = $('scan-result');
-  let html = '<table class="result-table"><tr><th>扫描参数</th><th>屈曲SF</th><th>界面SF</th><th>屈服SF</th><th>界面温度(K)</th></tr>';
+  let html = '<table class="result-table"><tr><th>扫描参数</th><th>屈曲 <i class="sym">S</i><sub class="u">F</sub></th><th>界面 <i class="sym">S</i><sub class="u">F</sub></th><th>屈服 <i class="sym">S</i><sub class="u">F</sub></th><th>界面温度 (K)</th></tr>';
   resultsArr.forEach((r, i) => {
     html += `<tr><td>${labels[i]}</td>
-      <td class="${cls(r.safety_buckling)}">${fmt(r.safety_buckling, 2)}</td>
-      <td class="${cls(r.safety_interface)}">${fmt(r.safety_interface, 2)}</td>
-      <td class="${cls(r.safety_yield)}">${fmt(r.safety_yield, 2)}</td>
+      <td class="${clsSF(r.safety_buckling,'buckling')}">${fmt(r.safety_buckling, 2)}</td>
+      <td class="${clsSF(r.safety_interface,'interface')}">${fmt(r.safety_interface, 2)}</td>
+      <td class="${clsSF(r.safety_yield,'yield')}">${fmt(r.safety_yield, 2)}</td>
       <td>${fmt(r.T_interface, 1)}</td></tr>`;
   });
   html += '</table>';
   html += '<div class="sf-legend">'
-    + '<span class="lg pass">■ ≥ 1.0 安全</span>'
-    + '<span class="lg warn">■ 0.8–1.0 临界</span>'
-    + '<span class="lg fail">■ &lt; 0.8 危险</span>'
+    + '<span class="lg pass">■ 涂层屈曲 ≥ 1 / 基体屈服 ≥ 1.5 / 界面剪切 ≥ 5</span>'
+    + '<span class="lg warn">■ 涂层屈曲 0.8–1 / 基体屈服 1–1.5 / 界面剪切 1–5</span>'
+    + '<span class="lg fail">■ 涂层屈曲 &lt; 0.8 / 基体屈服 &lt; 1 / 界面剪切 &lt; 1</span>'
     + '</div>';
   el.innerHTML = html;
   el.classList.remove('hidden');
