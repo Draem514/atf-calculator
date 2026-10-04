@@ -252,21 +252,19 @@
                 <!-- t_c 尺寸标注（竖线+文字均外移到高亮条左侧） -->
                 <line x1="-96" y1="0" x2="-96" y2="38" stroke="#c4a35a" stroke-width="1"/>
                 <text x="-102" y="22" fill="#e8cc7a" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">c</tspan></text>
-                 <!-- 涂层环向压应力区（黄色高亮条，Cr层内下半段） -->
+<!-- 涂层环向压应力区（黄色高亮条，Cr层内下半段；文字居中置于条内） -->
                 <rect x="-86" y="24" width="172" height="12" rx="2" fill="#fbbf24" fill-opacity="0.22" stroke="none"/>
-                <text x="86" y="33" fill="#1a0f00" font-size="11" text-anchor="end" font-family="Segoe UI" font-weight="600">涂层环向压应力区</text>
+                <text x="0" y="33" fill="#1a0f00" font-size="10" text-anchor="middle" font-family="Segoe UI" font-weight="600">涂层环向压应力区</text>
 
                  <!-- 界面线（金色加粗分隔线） -->
                 <line x1="-90" y1="38" x2="90" y2="38" stroke="#e0c27a" stroke-width="2.5"/>
-                <!-- 界面位置标记（右上方） -->
-                <text x="94" y="50" fill="#e0c27a" font-size="12" text-anchor="start" font-family="Segoe UI" font-weight="700">界面 b</text>
-                <!-- 界面剪切失效风险区：箭头从右指向界面线，文字置于箭头上方 -->
-                <line x1="106" y1="38" x2="80" y2="38" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
-                <text x="108" y="33" fill="#f87171" font-size="10" text-anchor="start" font-family="Segoe UI" font-weight="600">界面剪切失效风险区</text>
+                <!-- 界面剪切失效风险：短箭头自上指向界面线右段，文字置于右缘（在Cr层与Zr层之间的空隙） -->
+                <line x1="130" y1="30" x2="130" y2="41" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
+                <text x="140" y="48" fill="#f87171" font-size="10" text-anchor="end" font-family="Segoe UI" font-weight="600">剪切风险</text>
 
                 <!-- Zr 基体层（蓝色） -->
                 <rect x="-90" y="55" width="180" height="38" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
-                <!-- t_zr 尺寸标注（竖线+文字均外移到高亮条左侧） -->
+                <!-- t_zr 尺寸标注 -->
                 <line x1="-96" y1="55" x2="-96" y2="93" stroke="#8ab4f8" stroke-width="1"/>
                 <text x="-102" y="76" fill="#8ab4f8" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">zr</tspan></text>
 
