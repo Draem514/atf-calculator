@@ -228,13 +228,13 @@
               <circle cx="118" cy="71" r="2" fill="#4ade80"/>
               <text x="124" y="65" fill="#4ade80" font-size="15" font-style="italic" font-family="Cambria Math,Times New Roman" font-weight="700">c</text>
 
-              <!-- 内压 P_i 箭头（从右上方指向内孔壁） -->
-              <path d="M 200 82 L 142 116" stroke="#f87171" stroke-width="1.5" marker-end="url(#arr-red)"/>
-              <text x="206" y="76" fill="#f87171" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">P<tspan dy="3" font-size="9">i</tspan></text>
+              <!-- 内压 P_i 箭头：从内孔中心右侧水平指向内孔右壁（管内流体向外压） -->
+              <path d="M 158 155 L 176 155" stroke="#f87171" stroke-width="1.6" marker-end="url(#arr-red)"/>
+              <text x="163" y="145" fill="#f87171" font-size="12" font-style="italic" font-family="Cambria Math" font-weight="600">P<tspan dy="3" font-size="9">i</tspan></text>
 
-              <!-- 外压 P_o 箭头（从左上方指向外壁） -->
-              <path d="M 40 82 L 88 116" stroke="#60a5fa" stroke-width="1.5" marker-end="url(#arr-blue)"/>
-              <text x="24" y="76" fill="#60a5fa" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">P<tspan dy="3" font-size="9">o</tspan></text>
+              <!-- 外压 P_o 箭头：从正上方竖直指向外壁顶部（外部载荷向内压） -->
+              <path d="M 118 62 L 118 82" stroke="#60a5fa" stroke-width="1.6" marker-end="url(#arr-blue)"/>
+              <text x="124" y="57" fill="#60a5fa" font-size="12" font-style="italic" font-family="Cambria Math" font-weight="600">P<tspan dy="3" font-size="9">o</tspan></text>
 
               <!-- 左下说明 -->
               <text x="60" y="276" fill="#8ab4f8" font-size="12" text-anchor="middle" font-family="Segoe UI" font-weight="600">整体截面</text>
@@ -258,11 +258,11 @@
 
                 <!-- 界面线（金色加粗分隔线） -->
                 <line x1="-90" y1="38" x2="90" y2="38" stroke="#e0c27a" stroke-width="2.5"/>
-                <!-- 界面位置标记 -->
+                <!-- 界面位置标记（右上方） -->
                 <text x="94" y="50" fill="#e0c27a" font-size="12" text-anchor="start" font-family="Segoe UI" font-weight="700">界面 b</text>
-                <!-- 界面剪切失效风险区（高亮条，跨越界面线上下各一半） -->
-                <rect x="-86" y="34" width="172" height="14" rx="2" fill="#f87171" fill-opacity="0.20" stroke="none"/>
-                <text x="86" y="45" fill="#ffffff" font-size="11" text-anchor="end" font-family="Segoe UI" font-weight="600">界面剪切风险区</text>
+                <!-- 界面剪切失效风险区：从右侧引箭头指向界面线 -->
+                <line x1="60" y1="38" x2="88" y2="38" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
+                <text x="88" y="35" fill="#f87171" font-size="10" text-anchor="start" font-family="Segoe UI" font-weight="600">剪切风险区</text>
 
                 <!-- Zr 基体层（蓝色） -->
                 <rect x="-90" y="55" width="180" height="38" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
