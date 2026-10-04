@@ -236,54 +236,55 @@
               <circle cx="167" cy="106" r="2.2" fill="#e0c27a"/>
               <text x="172" y="100" fill="#e0c27a" font-size="15" font-style="italic" font-family="Cambria Math,Times New Roman" font-weight="700">b</text>
 
-              <!-- 标注c（绿，垂直向上） -->
-              <line x1="118" y1="155" x2="118" y2="78" stroke="#4ade80" stroke-width="1" stroke-dasharray="5,2"/>
-              <circle cx="118" cy="78" r="2.2" fill="#4ade80"/>
-              <text x="124" y="73" fill="#4ade80" font-size="15" font-style="italic" font-family="Cambria Math,Times New Roman" font-weight="700">c</text>
+               <!-- 标注c（绿，垂直向上） -->
+               <line x1="118" y1="155" x2="118" y2="78" stroke="#4ade80" stroke-width="1" stroke-dasharray="5,2"/>
+               <circle cx="118" cy="78" r="2.2" fill="#4ade80"/>
+               <text x="124" y="85" fill="#4ade80" font-size="15" font-style="italic" font-family="Cambria Math,Times New Roman" font-weight="700">c</text>
 
-               <!-- 压力箭头：p_i 从右上外侧指向内孔（→ 向内） -->
-               <path d="M 168 102 L 140 130" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
-               <text x="164" y="96" fill="#f87171" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">p<tspan dy="3" font-size="9">i</tspan></text>
+                <!-- 压力箭头：p_i 从右上外侧斜指向内孔（箭头向内） -->
+                <path d="M 172 98 L 145 128" stroke="#f87171" stroke-width="1.4" marker-end="url(#arr-red)"/>
+                <text x="178" y="92" fill="#f87171" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">p<tspan dy="3" font-size="9">i</tspan></text>
 
-               <!-- 压力箭头：p_o 从左上外侧指向外壁（→ 向内） -->
-               <path d="M 68 102 L 96 130" stroke="#60a5fa" stroke-width="1.4" marker-end="url(#arr-blue)"/>
-               <text x="56" y="96" fill="#60a5fa" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">p<tspan dy="3" font-size="9">o</tspan></text>
+                <!-- 压力箭头：p_o 从左上外侧斜指向外壁（箭头向内） -->
+                <path d="M 68 98 L 96 128" stroke="#60a5fa" stroke-width="1.4" marker-end="url(#arr-blue)"/>
+                <text x="46" y="92" fill="#60a5fa" font-size="13" font-style="italic" font-family="Cambria Math" font-weight="600">p<tspan dy="3" font-size="9">o</tspan></text>
 
 
               <!-- ==================== 右侧：局部放大框（独立展示） ==================== -->
              <rect x="265" y="55" width="290" height="250" rx="12" fill="#0d1b2a" stroke="#c4a35a" stroke-width="1.5"/>
 
              <!-- 标题 -->
-              <text x="410" y="79" fill="#c4a35a" font-size="15" text-anchor="middle" font-family="Segoe UI" font-weight="700">涂层 / 基体 截面示意</text>
+               <text x="410" y="81" fill="#c4a35a" font-size="15" text-anchor="middle" font-family="Segoe UI" font-weight="700">涂层 / 基体 截面示意</text>
 
-              <!-- ===== 层状剖面（从外到内：Cr → 界面 → Zr → 内孔）===== -->
-              <g transform="translate(410, 128)">
-                <!-- Cr 涂层层（外，金色底 + 深色字） -->
-                <rect x="-90" y="0" width="180" height="32" rx="3" fill="url(#grad-cr)" stroke="#d4b86a" stroke-width="1.2"/>
-                <text x="0" y="20" fill="#1a0f00" font-size="16" text-anchor="middle" font-family="Segoe UI" font-weight="700">Cr 涂层</text>
-                <!-- t_c 尺寸标注（左端外侧） -->
-                <line x1="-74" y1="0" x2="-74" y2="32" stroke="#c4a35a" stroke-width="1"/>
-                <line x1="-80" y1="0" x2="-68" y2="0" stroke="#c4a35a" stroke-width="0.9"/>
-                <line x1="-80" y1="32" x2="-68" y2="32" stroke="#c4a35a" stroke-width="0.9"/>
-                <text x="-86" y="18" fill="#e8cc7a" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">c</tspan></text>
+               <!-- ===== 层状剖面（从外到内：Cr → 界面 → Zr → 内孔）===== -->
+               <g transform="translate(410, 126)">
+                 <!-- Cr 涂层层（外，金色底 + 深色字） -->
+                 <rect x="-90" y="0" width="180" height="28" rx="3" fill="url(#grad-cr)" stroke="#d4b86a" stroke-width="1.2"/>
+                 <text x="0" y="19" fill="#1a0f00" font-size="16" text-anchor="middle" font-family="Segoe UI" font-weight="700">Cr 涂层</text>
+                 <!-- t_c 尺寸标注（左端外侧） -->
+                 <line x1="-74" y1="0" x2="−74" y2="28" stroke="#c4a35a" stroke-width="1"/>
+                 <line x1="−80" y1="0" x2="−68" y2="0" stroke="#c4a35a" stroke-width="0.9"/>
+                 <line x1="−80" y1="28" x2="−68" y2="28" stroke="#c4a35a" stroke-width="0.9"/>
+                 <text x="−86" y="18" fill="#e8cc7a" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">c</tspan></text>
 
-                <!-- 界面线（金色加粗） -->
-                <line x1="-90" y1="32" x2="90" y2="32" stroke="#e0c27a" stroke-width="2.5"/>
-                <text x="94" y="35" fill="#e0c27a" font-size="13" text-anchor="start" font-family="Segoe UI" font-weight="700">界面 b</text>
+                 <!-- 界面线（金色加粗，位于Cr与Zr交界处） -->
+                 <line x1="−90" y1="28" x2="90" y2="28" stroke="#e0c27a" stroke-width="2.5"/>
+                 <!-- 界面标签放在界面线正下方偏右（不压任何色块） -->
+                 <text x="94" y="44" fill="#e0c27a" font-size="13" text-anchor="start" font-family="Segoe UI" font-weight="700">界面 b</text>
 
-                <!-- Zr 基体层（内，蓝色底 + 白字） -->
-                <rect x="-90" y="32" width="180" height="50" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
-                <text x="0" y="62" fill="#ffffff" font-size="16" text-anchor="middle" font-family="Segoe UI" font-weight="700">Zr 基体</text>
-                <!-- t_zr 尺寸标注（左端外侧） -->
-                <line x1="-74" y1="32" x2="-74" y2="82" stroke="#8ab4f8" stroke-width="1"/>
-                <line x1="-80" y1="32" x2="-68" y2="32" stroke="#8ab4f8" stroke-width="0.9"/>
-                <line x1="-80" y1="82" x2="-68" y2="82" stroke="#8ab4f8" stroke-width="0.9"/>
-                <text x="-86" y="60" fill="#8ab4f8" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">zr</tspan></text>
+                 <!-- Zr 基体层（内，蓝色底 + 白字） -->
+                 <rect x="−90" y="28" width="180" height="54" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
+                 <text x="0" y="60" fill="#ffffff" font-size="16" text-anchor="middle" font-family="Segoe UI" font-weight="700">Zr 基体</text>
+                 <!-- t_zr 尺寸标注（左端外侧） -->
+                 <line x1="−74" y1="28" x2="−74" y2="82" stroke="#8ab4f8" stroke-width="1"/>
+                 <line x1="−80" y1="28" x2="−68" y2="28" stroke="#8ab4f8" stroke-width="0.9"/>
+                 <line x1="−80" y1="82" x2="−68" y2="82" stroke="#8ab4f8" stroke-width="0.9"/>
+                 <text x="−86" y="59" fill="#8ab4f8" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">zr</tspan></text>
 
-                <!-- 内孔（最内，深色底 + 蓝字） -->
-                <rect x="-90" y="82" width="180" height="36" rx="4" fill="#0a1520" stroke="#2a5580" stroke-width="1.2"/>
-                <text x="0" y="104" fill="#8ab4f8" font-size="14" text-anchor="middle" font-family="Segoe UI" font-weight="600">内孔　r = a</text>
-              </g>
+                 <!-- 内孔（最内，深色底 + 蓝字） -->
+                 <rect x="−90" y="82" width="180" height="36" rx="4" fill="#0a1520" stroke="#2a5580" stroke-width="1.2"/>
+                 <text x="0" y="104" fill="#8ab4f8" font-size="14" text-anchor="middle" font-family="Segoe UI" font-weight="600">内孔　r = a</text>
+               </g>
 
              <!-- 底部说明 -->
                <rect x="272" y="274" width="276" height="30" rx="6" fill="rgba(196,163,90,0.08)" stroke="#c4a35a" stroke-width="0.8"/>
