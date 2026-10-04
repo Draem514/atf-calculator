@@ -249,9 +249,9 @@
               <g transform="translate(410, 92)">
                  <!-- Cr 涂层层（顶部，金色） -->
                 <rect x="-90" y="0" width="180" height="38" rx="3" fill="url(#grad-cr)" stroke="#d4b86a" stroke-width="1.2"/>
-                <!-- t_c 尺寸标注（纯竖线，无斜向端点标记） -->
-                <line x1="-74" y1="0" x2="-74" y2="38" stroke="#c4a35a" stroke-width="1"/>
-                <text x="-94" y="22" fill="#e8cc7a" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">c</tspan></text>
+                <!-- t_c 尺寸标注（竖线+文字均外移到高亮条左侧） -->
+                <line x1="-96" y1="0" x2="-96" y2="38" stroke="#c4a35a" stroke-width="1"/>
+                <text x="-102" y="22" fill="#e8cc7a" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">c</tspan></text>
                 <!-- 涂层环向压应力区（高亮条，位于Cr层内） -->
                 <rect x="-86" y="22" width="172" height="14" rx="2" fill="#fbbf24" fill-opacity="0.18" stroke="none"/>
                 <text x="86" y="33" fill="#ffffff" font-size="11" text-anchor="end" font-family="Segoe UI" font-weight="600">涂层环向压应力区</text>
@@ -260,15 +260,15 @@
                 <line x1="-90" y1="38" x2="90" y2="38" stroke="#e0c27a" stroke-width="2.5"/>
                 <!-- 界面位置标记 -->
                 <text x="94" y="50" fill="#e0c27a" font-size="12" text-anchor="start" font-family="Segoe UI" font-weight="700">界面 b</text>
-                <!-- 界面剪切失效风险区（高亮条） -->
-                <rect x="-86" y="40" width="172" height="14" rx="2" fill="#f87171" fill-opacity="0.20" stroke="none"/>
-                <text x="86" y="51" fill="#ffffff" font-size="11" text-anchor="end" font-family="Segoe UI" font-weight="600">界面剪切风险区</text>
+                <!-- 界面剪切失效风险区（高亮条，跨越界面线上下各一半） -->
+                <rect x="-86" y="34" width="172" height="14" rx="2" fill="#f87171" fill-opacity="0.20" stroke="none"/>
+                <text x="86" y="45" fill="#ffffff" font-size="11" text-anchor="end" font-family="Segoe UI" font-weight="600">界面剪切风险区</text>
 
                 <!-- Zr 基体层（蓝色） -->
                 <rect x="-90" y="55" width="180" height="38" rx="3" fill="url(#grad-zr)" stroke="#3a7abd" stroke-width="1.2"/>
-                <!-- t_zr 尺寸标注（纯竖线，无斜向端点标记） -->
-                <line x1="-74" y1="55" x2="-74" y2="93" stroke="#8ab4f8" stroke-width="1"/>
-                <text x="-94" y="76" fill="#8ab4f8" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">zr</tspan></text>
+                <!-- t_zr 尺寸标注（竖线+文字均外移到高亮条左侧） -->
+                <line x1="-96" y1="55" x2="-96" y2="93" stroke="#8ab4f8" stroke-width="1"/>
+                <text x="-102" y="76" fill="#8ab4f8" font-size="13" text-anchor="end" font-family="Cambria Math" font-weight="700">t<tspan font-size="10" dy="2">zr</tspan></text>
 
                 <!-- 内孔（深色） -->
                 <rect x="-90" y="93" width="180" height="30" rx="3" fill="#0a1520" stroke="#2a5580" stroke-width="1.2"/>
@@ -276,8 +276,8 @@
               </g>
 
                <!-- 底部逻辑说明 -->
-               <rect x="272" y="256" width="276" height="32" rx="6" fill="rgba(196,163,90,0.08)" stroke="#c4a35a" stroke-width="0.8"/>
-               <text x="410" y="276" fill="#e8cc7a" font-size="12" text-anchor="middle" font-family="Segoe UI">内压 + 热失配 → 涂层环向压应力 · 界面剪切失效风险</text>
+               <rect x="270" y="254" width="280" height="30" rx="6" fill="rgba(196,163,90,0.08)" stroke="#c4a35a" stroke-width="0.8"/>
+               <text x="410" y="274" fill="#e8cc7a" font-size="11" text-anchor="middle" font-family="Segoe UI">内压 + 热失配 → 涂层环压应力 · 界面剪切失效风险</text>
            </svg>
         </div>
       </section>
