@@ -448,12 +448,7 @@ input[type="text"] { text-align: left; }
   display: block;
 }
 .diagram-legend {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  padding-top: 0.4rem;
-  font-size: 0.80rem;
-  color: var(--text-dim);
+  display: none;
 }
 .diagram-legend .sw {
   display: inline-block;
